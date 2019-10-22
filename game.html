@@ -1,0 +1,97 @@
+<html>
+<body bgcolor="gray">
+<img src="board.png" id='board' style='position:absolute; top:0; left:0; width:500; height:500; z-index:1'>
+<img src="dude.png" id='dude' style='position:absolute; top:0; left:0; z-index:3'>
+<img src="ball.png" id='ball' style='position:absolute; top:200; left:0; z-index:2'>
+<div id='scoreId' style='position:absolute; top:0; left:0; z-index:4'>DODGEBALL</div>
+
+<script>
+
+var dudeObj = document.getElementById('dude').style;
+var xDude = 0;
+var yDude = 0;
+
+var ballObj = document.getElementById('ball').style;
+var xBall = 0;
+var yBall = 200;
+
+var xSpeed = 10;
+var ySpeed = 10;
+
+var timerA;
+moveTimer();
+
+var score = 0;
+var speedInc = 0;
+
+document.onkeydown = KeyDownMoveIt;
+
+function KeyDownMoveIt(e)
+{
+   if (e.keyCode == 37)
+   xDude = xDude - 10 - speedInc*10;
+
+   if (e.keyCode == 39)
+   xDude = xDude + 10 + speedInc*10;
+
+   if (e.keyCode == 38)
+   yDude = yDude - 10 - speedInc*10;
+
+   if (e.keyCode == 40)
+   yDude = yDude + 10 + speedInc*10;
+
+   if (xDude > 500 - 50)
+   xDude = 500 - 50;
+
+   if (yDude > 500 - 50)
+   yDude = 500 - 50;
+
+   if (xDude < 0)
+   xDude = 0;
+
+   if (yDude < 0)
+   yDude = 0;
+
+   dudeObj.left = xDude;
+   dudeObj.top = yDude;
+}
+
+function moveTimer()
+{
+   if (xBall + xSpeed > 500 - 50)
+   xSpeed = -5 * Math.random() - 5 - speedInc;
+
+   if (xBall + xSpeed < 0)
+   xSpeed = 5 * Math.random() + 5 + speedInc;
+
+   if (yBall + ySpeed > 500 - 50)
+   ySpeed = -5 * Math.random() - 5 - speedInc;
+
+   if (yBall + ySpeed < 0)
+   ySpeed = 5 * Math.random() + 5 + speedInc;
+
+   xBall = xBall + xSpeed;
+   yBall = yBall + ySpeed;
+
+   ballObj.left = xBall;
+   ballObj.top = yBall;
+
+   timerA = setTimeout('moveTimer()',40);
+
+   if ((xDude < xBall+50) && (xDude+50 > xBall) && (yDude < yBall+50) && (yDude+50 > yBall))
+   {
+      clearTimeout(timerA);
+      document.body.style.backgroundColor="red";
+      document.getElementById("scoreId").innerHTML = "Score: " + score;
+   }
+   
+   score++;
+   
+   speedInc = score * 0.01;
+}
+
+</script>
+
+</body>
+</html>
+
